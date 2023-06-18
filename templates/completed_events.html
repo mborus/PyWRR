@@ -1,0 +1,36 @@
+<body>
+    <h1>Completed Events</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Schedule ID</th>
+                <th>Station ID</th>
+                <th>Start Time</th>
+                <th>Runtime</th>
+                <th>Repeat Rule</th>
+                <th>Filepath</th>
+                <th>File Size</th>
+                <th></th> <!-- Column for download button -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.schedule_id }}</td>
+                <td>{{ event.station_id }}</td>
+                <td>{{ event.starttime }}</td>
+                <td>{{ event.runtime }} min.</td>
+                <td>{{ event.repeat_rule }}</td>
+                <td>{{ event.filepath }}</td>
+                <td>{{ event.filesize }}</td>
+                <td>
+                    {% if event.filesize > 0 %}
+                        <a href="/archive/{{ event.filepath }}" download>Download</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+

@@ -1,0 +1,44 @@
+<body xmlns="http://www.w3.org/1999/html">
+    <h1>Stations</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Station ID</th>
+                <th>Station Name</th>
+                <th>Station URL</th>
+                <th>Created</th>
+                <th></th> <!-- Column for delete button -->
+                <th></th> <!-- Column for play button -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for station in stations %}
+            <tr>
+                <td>{{ station.station_id }}</td>
+                <td>{{ station.station_name }}</td>
+                <td>{{ station.station_url }}</td>
+                <td>{{ station.created }}</td>
+                <td class="delete-btn">
+                     <button class="delete-btn" hx-post="/delete-station/{{ station.station_id }}" hx-target="body">Delete</button>
+                </td>
+                <td class="play-btn"><button onclick="window.open('{{ station.station_url }}')">Play</button></td> <!-- Play button -->
+            </tr>
+            {% endfor %}
+
+
+          <tr>
+                  <form hx-post="/add-station" hx-target="body">
+                      <td><input type="text" name="station_id" id="station_id" required></td>
+                      <td><input type="text" name="station_name" id="station_name" required></td>
+                      <td><input type="text" name="station_url" id="station_url" required></td>
+                      <td></td>
+                      <td> <button type="submit">Add</button></td>
+                      <td></td>
+                  </form>
+
+          </tr>
+
+        </tbody>
+    </table>
+
+</body>

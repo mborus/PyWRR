@@ -1,0 +1,5 @@
+use nginx to protect service
+
+leave recording running "forever" because otherwise it's not possible to extend recording time.
+
+Get ffmpeg from https://ffmpeg.org/download.html

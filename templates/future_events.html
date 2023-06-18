@@ -1,0 +1,41 @@
+<body>
+    <h1>Future Events</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Schedule ID</th>
+                <th>Station ID</th>
+                <th>Start Time</th>
+                <th>Runtime</th>
+                <th>Repeat Rule</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.schedule_id }}</td>
+                <td>{{ event.station_id }}</td>
+                <td>{{ event.starttime }}</td>
+                <td>{{ event.runtime }} min.</td>
+                <td>{{ event.repeat_rule }}</td>
+                <td>
+                    <button class="delete-btn" hx-post="/delete-schedule/{{ event.schedule_id }}" hx-target="body">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        <tr>
+            <form hx-post="/add-schedule" hx-target="body">
+            <td></td>
+            <td><input type="text" name="station_id" id="station_id" required></td>
+            <td><input type="text" name="starttime" id="starttime" required></td>
+            <td><input type="text" name="runtime" id="runtime" required></td>
+            <td><input type="text" name="repeat_rule" id="repeat_rule"></td>
+            <td><button type="submit">Add</button></td></td>
+            </form>
+
+
+        </tr>
+        </tbody>
+    </table>
+</body>

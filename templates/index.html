@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/htmx.org@1.9.2"
+            integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h"
+            crossorigin="anonymous"></script>
+
+    <script>
+        setInterval(function () {
+            var currentTime = new Date();
+            console.log("Current time: " + currentTime.toLocaleTimeString());
+        }, 5000);
+    </script>
+    <script>
+        document.addEventListener('click', function (event) {
+            console.log('Clicked:', event.target);
+        });
+    </script>
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        .delete-btn,
+        .play-btn {
+            text-align: center;
+        }
+    </style>
+
+    <meta charset="UTF-8">
+
+    <title>TEST</title>
+</head>
+<body>
+
+<script>
+    console.log("1")
+</script>
+
+Hallo Welt
+
+<a href="/stations" hx-boost="true">Stations</a>
+<a href="/future-events" hx-boost="true">Upcoming recordings</a>
+<a href="/completed-events" hx-boost="true">Completed recordings</a>
+
+<a href="/settings" hx-boost="true">Settings</a>
+
+
+
+<button id="button1">Button 1</button>
+<button id="button2">Button 2</button>
+
+</body>
+</html>
