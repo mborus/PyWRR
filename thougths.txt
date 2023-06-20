@@ -3,3 +3,5 @@ use nginx to protect service
 leave recording running "forever" because otherwise it's not possible to extend recording time.
 
 Get ffmpeg from https://ffmpeg.org/download.html
+
+Fix browser navigation by listening to request.META.get("HTTP_HX_REQUEST") - source: https://blog.r00ks.io/blog/browser-history-htmx

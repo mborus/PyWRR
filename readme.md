@@ -3,7 +3,7 @@
 Self hosted, raspberry pi friendly project to automatically
 record web radio 📻 using FFMPEG.
 
-🚧 this is just a barely working a prototype 🚧
+🚧 this is just a barely working prototype 🚧
 
 
 ## Design decisions:
@@ -15,7 +15,7 @@ record web radio 📻 using FFMPEG.
 - It's not necessary to be exactly on time - later recordings will have automatic pre/post roll
 - Needs mobile friendly web interface. Use nginx to protect the service
 - Backend and frontend are seperated, so that scheduled recordings are not affected by front end problems
-- As an exercise in laziness the sql and flask functionality is mostly outsourced to ChatGPT
+- As an exercise in laziness the sql and flask functionality is mostly outsourced to ChatGPT (with human oversight, of course)
 
 
 ## Tasks
@@ -26,12 +26,12 @@ record web radio 📻 using FFMPEG.
 - ⚠️ authentification (outsourced to nginx)
 - ❌ setup
 - ✔️ basic "wireframe" web site 
-- ❌ fix browser back button navigation
+- 🟡 fix browser back button navigation (currently a hack)
 - ✔️ managing radio station urls
 - ✔️ basic scheduling
 - ❌ changing recordings that are running
 - ✔️ downloading completed recordings
-- ❌ live streaming recordings in progress with navigation
+- ❌ documentation
 - ❌ tests
                     
 ## Requirements

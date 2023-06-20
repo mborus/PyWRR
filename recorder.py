@@ -68,13 +68,10 @@ class FFMPEGStreamRecording:
         self.stderr_thread.start()
 
         while True:
-            self.runtime_sec = (time.time() - self.starttime)
-            if self.log:
-                print(f"{self.schedule_id} # {self.runtime_sec=:02.1f} - {self.log[-1]}")
-            else:
-                print(f"{self.schedule_id} # {self.runtime_sec=:02.1f} - ")
-
-            if self.runtime_sec > self.duration_min * 60:
+            self.runtime_sec = int(time.time() - self.starttime)
+            remaining_sec = self.duration_min * 60 - self.runtime_sec
+            print(f"[#{self.schedule_id}:{remaining_sec}s] {self.runtime_sec=:02.1f} - {self.log[-1] if self.log else '-'}")
+            if remaining_sec <= 0:
                 break
             time.sleep(2)
 
