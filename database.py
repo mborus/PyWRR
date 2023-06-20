@@ -2,10 +2,10 @@ import datetime
 import os
 import sqlite3
 from contextlib import contextmanager
+from pathlib import Path
 
 # Global variable for the database name
 DATABASE_NAME = "main.db"
-
 
 class DatabaseException(Exception):
     pass
@@ -415,3 +415,8 @@ def get_scheduled_events(future_events=True, active_events=True, completed_event
             event_list.append(event_dict)
 
         return event_list
+
+
+if not Path(DATABASE_NAME).exists():
+    setup_database_tables()
+

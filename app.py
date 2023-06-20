@@ -1,10 +1,16 @@
 import os
+import markdown
 from flask import Flask, flash, redirect, render_template, send_file, request
 from database import (get_all_stations, get_scheduled_events, delete_scheduled_event, DatabaseException, add_station,
                       delete_station,
                       add_schedule_item)
 
 app = Flask(__name__)
+
+# turn off caching while prototyping
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
 app.secret_key = "your_secret_key"  # Set your secret key here
 
 
@@ -99,6 +105,14 @@ def download_file(filepath):
 
     # Serve the file for download
     return send_file(abs_filepath, as_attachment=False, mimetype='audio/mp2t')  # true für download
+
+
+@app.route('/about')
+def about_page():
+    with open('readme.md', 'rb') as file:
+        markdown_content = file.read().decode('utf-8')
+    html_content = markdown.markdown(markdown_content)
+    return render_template('about.html', content=html_content)
 
 # if __name__ == '__main__':
 #    app.run(host="0.0.0.0", port=9000)

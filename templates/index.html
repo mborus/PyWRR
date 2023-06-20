@@ -5,51 +5,31 @@
             integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h"
             crossorigin="anonymous"></script>
 
-    <script>
-        setInterval(function () {
-            var currentTime = new Date();
-            console.log("Current time: " + currentTime.toLocaleTimeString());
-        }, 5000);
-    </script>
-    <script>
-        document.addEventListener('click', function (event) {
-            console.log('Clicked:', event.target);
-        });
-    </script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
-    <style>
-        table {
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-        }
-        .delete-btn,
-        .play-btn {
-            text-align: center;
-        }
-    </style>
 
     <meta charset="UTF-8">
 
-    <title>TEST</title>
+    <title>PyWRR - Python Web Radio Recorder</title>
 </head>
 <body>
 
 <script>
-    console.log("1")
+    console.log("main page reached1")
 </script>
 
-Hallo Welt
+<h1>PyWRR</h1>
+
+<br/>
 
 <a href="/stations" hx-boost="true">Stations</a>
 <a href="/future-events" hx-boost="true">Upcoming recordings</a>
 <a href="/completed-events" hx-boost="true">Completed recordings</a>
 
+<br/>
+<a href="/about" hx-boost="true">About</a>
 <a href="/settings" hx-boost="true">Settings</a>
-
-
 
 <button id="button1">Button 1</button>
 <button id="button2">Button 2</button>

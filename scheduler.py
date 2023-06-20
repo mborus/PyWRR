@@ -2,10 +2,12 @@ import datetime
 import database
 import time
 from recorder import FFMPEGStreamRecording
-class SchedulingLoop:
 
+
+class SchedulingLoop:
     def __init__(self):
         self._current_treads = []
+
     def main_loop(self):
 
         while True:
@@ -32,21 +34,24 @@ class SchedulingLoop:
             try:
                 next_scheduled_item = database.get_next_schedule_item()
 
-                schedule_id = next_scheduled_item['schedule_id']
+                schedule_id = next_scheduled_item["schedule_id"]
                 schedule_details = database.get_schedule_item(schedule_id=schedule_id)
                 print(schedule_details)
 
-                next_starttime = datetime.datetime.strptime(next_scheduled_item['starttime'][:19], "%Y-%m-%d %H:%M:%S")
+                next_starttime = datetime.datetime.strptime(
+                    next_scheduled_item["starttime"][:19], "%Y-%m-%d %H:%M:%S"
+                )
                 current_time = datetime.datetime.now()
                 if next_starttime < current_time:
 
                     database.activate_schedule_item(schedule_id)
 
-                    f = FFMPEGStreamRecording(schedule_id=schedule_id,
-                                              duration_min=schedule_details['runtime'],
-                                              url=schedule_details['station_url'],
-                                              filepath=schedule_details['filepath']
-                                              )
+                    f = FFMPEGStreamRecording(
+                        schedule_id=schedule_id,
+                        duration_min=schedule_details["runtime"],
+                        url=schedule_details["station_url"],
+                        filepath=schedule_details["filepath"],
+                    )
                     f.recording_thread.start()
                     self._current_treads.append(f)
 
@@ -58,8 +63,6 @@ class SchedulingLoop:
                 time.sleep(15)
 
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     sl = SchedulingLoop()
     sl.main_loop()

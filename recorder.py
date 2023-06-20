@@ -1,6 +1,5 @@
 import time
 import datetime
-import shlex
 from threading import Thread
 import subprocess
 from pathlib import Path
