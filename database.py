@@ -1,5 +1,6 @@
 import datetime
 import os
+import re
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
@@ -129,6 +130,13 @@ def add_schedule_item(station_id, starttime, runtime, filepath=None, repeat_rule
             filepath = f"{station_id} {starttime:%Y-%m-%d %H-%M-%S}.ts"
         else:
             filepath = f"{station_id} {starttime}.ts"
+
+    # filter forbidden chars from filepath
+    def filter_filename(filename):
+        forbidden_chars = r'[<>:"/\\|?*]'
+        return re.sub(forbidden_chars, '_', filename)
+
+    filepath = filter_filename(filepath)
 
     with get_cursor() as cursor:
         # Check if an entry already exists for the station and starttime
@@ -367,12 +375,12 @@ def update_schedule_item_filesize(schedule_id):
         )
         filepath = cursor.fetchone()[0]
 
-        # Check if the file exists
-        if not os.path.exists(filepath):
-            raise FileNotFoundError("File does not exist.")
-
         # Retrieve the file size
-        filesize = os.path.getsize(filepath)
+        # Check if the file exists
+        if os.path.exists(filepath):
+            filesize = os.path.getsize(filepath)
+        else:
+            filesize = 0
 
         # Update the filesize field of the specified schedule item
         cursor.execute(

@@ -27,13 +27,13 @@ database.delete_station(station_id="DMY")
 
 database.add_schedule_item(station_id='RSH', starttime=datetime.datetime.now(), runtime=2, filepath=None)
 database.add_schedule_item(station_id='LOS40', starttime=datetime.datetime.now() + datetime.timedelta(seconds=60),
-                           runtime=65, filepath=None)
+                           runtime=5, filepath=None)
 
-print(database.get_next_schedule_item())
-try:
-    database.activate_schedule_item(1)
-except database.DatabaseException:
-    pass
+#print(database.get_next_schedule_item())
+#try:
+#    database.activate_schedule_item(1)
+#except database.DatabaseException:
+#    pass
 
 print(database.get_next_schedule_item())
 
