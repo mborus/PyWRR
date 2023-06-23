@@ -1,7 +1,6 @@
 import datetime
 import database
 
-# database.DATABASE_NAME = f'main {datetime.datetime.now():%Y-%m-%d_%H-%M-%S}'
 
 database.setup_database_tables()
 

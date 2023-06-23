@@ -209,7 +209,7 @@ def get_next_schedule_item():
     with get_cursor() as cursor:
         # Retrieve the next schedule item that is not active, not completed, and not aborted
         cursor.execute(
-            "SELECT * FROM schedule WHERE active = 0 AND completed = 0 AND aborted = 0 ORDER BY starttime ASC LIMIT 1"
+            "SELECT * FROM schedule WHERE active = 0 AND completed = 0 AND aborted = 0 ORDER BY starttime LIMIT 1"
         )
         schedule_item = cursor.fetchone()
 
@@ -418,7 +418,7 @@ def get_scheduled_events(future_events=True, active_events=True, completed_event
         filters_query = " OR ".join(filters)
 
         # Retrieve the scheduled events based on the filters
-        query = f"SELECT * FROM schedule WHERE {filters_query} ORDER BY starttime ASC"
+        query = f"SELECT * FROM schedule WHERE {filters_query} ORDER BY starttime"
         cursor.execute(query)
         events = cursor.fetchall()
 
@@ -439,4 +439,3 @@ def get_scheduled_events(future_events=True, active_events=True, completed_event
 
 if not Path(DATABASE_NAME).exists():
     setup_database_tables()
-
