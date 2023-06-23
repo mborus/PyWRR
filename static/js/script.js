@@ -15,7 +15,7 @@ document.addEventListener('click', function (event) {
 // Replace the current URL with the URL of the main page
 function replaceURLWithMainPage() {
     var currentURL = window.location.href;
-    var mainPageURL =  window.location.origin; #  main page
+    var mainPageURL =  window.location.origin;
 
     // Check if the current URL is a subpage
     if (currentURL !== mainPageURL && currentURL.startsWith(mainPageURL)) {
