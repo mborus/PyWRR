@@ -128,6 +128,15 @@ def get_all_stations():
 
 def add_schedule_item(station_id, starttime, runtime, filepath=None, repeat_rule=None):
 
+    if isinstance(starttime, datetime.datetime):
+        if starttime < datetime.datetime.now():
+            starttime = datetime.datetime.now()
+    else:
+        now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if starttime < now_str:
+            starttime = now_str
+
+
     # filter forbidden chars from filepath
     def filter_filename(filename):
         forbidden_chars = r'[<>:"/\\|?*]'

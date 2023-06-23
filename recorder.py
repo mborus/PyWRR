@@ -49,9 +49,9 @@ class FFMPEGStreamRecording:
                    '-y',
                    # input url
                    '-i', self.url,
-                   # do not reencode
+                   # do not re-encode
                    '-codec', 'copy',
-                   # duration: set to a day and manually abbort
+                   # duration: set to a day and manually abort
                    '-t',
                    # f"{datetime.datetime(1980, 1, 1) + datetime.timedelta(seconds=60 * self.duration_min):%H:%M:%S}",
                    '24:00:00',
