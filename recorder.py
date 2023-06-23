@@ -3,7 +3,7 @@ import datetime
 from threading import Thread
 import subprocess
 from pathlib import Path
-
+from settings import RECORDING_PATH
 
 class ScheduledRecordingException(Exception):
     pass
@@ -39,6 +39,12 @@ class FFMPEGStreamRecording:
 
     @property
     def get_ffmpeg_call(self):
+        if self.filename is None:
+            raise ValueError('Filename for recording not given.')
+
+        recording_path = Path(RECORDING_PATH, self.filename)
+
+
         command = ['ffmpeg',
                    # overwrite existing file
                    '-y',
@@ -51,7 +57,7 @@ class FFMPEGStreamRecording:
                    # f"{datetime.datetime(1980, 1, 1) + datetime.timedelta(seconds=60 * self.duration_min):%H:%M:%S}",
                    '24:00:00',
                    # output filename and path
-                   self.filename]
+                   recording_path]
 
         return command
 
@@ -112,20 +118,3 @@ def validate_unique_filename(filepath):
     return str(new_filepath)
 
 
-if __name__ == '__main__':
-    t = (5, 'RSH', '2023-06-18 10:24:07.765897', 1, None, 0, 0, 0, '2023-06-18 08:24:07', 'Radio Schleswig Holstein',
-         'https://streams.rsh.de/rsh-live/aac-64')
-    t2 = (2, 'LOS40', '2023-06-18 11:16:49.248646', 1, None, 0, 0, 0, '2023-06-18 08:16:49', 'LOS 40',
-          'https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40.mp3')
-
-    recording_threads = []
-    f = FFMPEGStreamRecording(schedule_id=t[0], duration_min=t[3], url=t[10])
-    f.recording_thread.start()
-    recording_threads.append(f)
-    t = t2
-    f = FFMPEGStreamRecording(schedule_id=t[0], duration_min=t[3], url=t[10])
-    f.recording_thread.start()
-    recording_threads.append(f)
-    for f in recording_threads:
-        f.recording_thread.join()
-    print('Done')

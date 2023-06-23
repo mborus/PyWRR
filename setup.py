@@ -25,9 +25,9 @@ database.add_station(station_id="DMY",
 database.delete_station(station_id="DMY")
 
 
-database.add_schedule_item(station_id='RSH', starttime=datetime.datetime.now(), runtime=2, filepath=None)
+database.add_schedule_item(station_id='RSH', starttime=datetime.datetime.now(), runtime=1, filepath=None)
 database.add_schedule_item(station_id='LOS40', starttime=datetime.datetime.now() + datetime.timedelta(seconds=60),
-                           runtime=5, filepath=None)
+                           runtime=1, filepath=None)
 
 #print(database.get_next_schedule_item())
 #try:

@@ -5,8 +5,10 @@ import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
 
+from settings import DATABASE_NAME, RECORDING_PATH
+
+
 # Global variable for the database name
-DATABASE_NAME = "main.db"
 
 class DatabaseException(Exception):
     pass
@@ -125,20 +127,28 @@ def get_all_stations():
 
 
 def add_schedule_item(station_id, starttime, runtime, filepath=None, repeat_rule=None):
-    if filepath is None:
-        if isinstance(starttime, datetime.datetime):
-            filepath = f"{station_id} {starttime:%Y-%m-%d %H-%M-%S}.ts"
-        else:
-            filepath = f"{station_id} {starttime}.ts"
 
     # filter forbidden chars from filepath
     def filter_filename(filename):
         forbidden_chars = r'[<>:"/\\|?*]'
         return re.sub(forbidden_chars, '_', filename)
 
-    filepath = filter_filename(filepath)
+    if filepath is None:
+        if isinstance(starttime, datetime.datetime):
+            filepath = f"{station_id} {starttime:%Y-%m-%d %H-%M-%S}.ts"
+        else:
+            filepath = f"{station_id} {starttime}.ts"
+        filepath = filter_filename(filepath)
 
     with get_cursor() as cursor:
+
+        # Check if the station exists
+        cursor.execute("SELECT COUNT(*) FROM stations WHERE station_id = ?", (station_id,))
+        count = cursor.fetchone()[0]
+
+        if count == 0:
+            raise DatabaseException(f"Station '{station_id}' does not exist.")
+
         # Check if an entry already exists for the station and starttime
         cursor.execute(
             "SELECT COUNT(*) FROM schedule WHERE station_id = ? AND starttime = ?",
@@ -375,6 +385,8 @@ def update_schedule_item_filesize(schedule_id):
         )
         filepath = cursor.fetchone()[0]
 
+        filepath = Path(RECORDING_PATH, filepath)
+
         # Retrieve the file size
         # Check if the file exists
         if os.path.exists(filepath):
@@ -406,7 +418,7 @@ def get_scheduled_events(future_events=True, active_events=True, completed_event
         filters_query = " OR ".join(filters)
 
         # Retrieve the scheduled events based on the filters
-        query = f"SELECT * FROM schedule WHERE {filters_query}"
+        query = f"SELECT * FROM schedule WHERE {filters_query} ORDER BY starttime ASC"
         cursor.execute(query)
         events = cursor.fetchall()
 
