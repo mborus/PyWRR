@@ -1,4 +1,5 @@
-<body>
+<div id="pywrr-main" hx-boost="true">
+
     <h1>Completed Events</h1>
     <table>
         <thead>
@@ -25,7 +26,7 @@
                 <td>{{ event.filesize }}</td>
                 <td>
                     {% if event.filesize > 0 %}
-                        <a href="/archive/{{ event.filepath }}" download>Download</a>
+                        <a href="/archive/{{ event.filepath }}" target="_new" download>Download</a>
                     {% endif %}
                 </td>
             </tr>
@@ -33,7 +34,7 @@
         </tbody>
     </table>
     <div>&nbsp;</div>
-    <button hx-get="/"  hx-trigger="click" hx-target="body">Home</button>
+    <button hx-get="/"  hx-trigger="click" hx-target="#pywrr-main">Home</button>
 
-</body>
+</div>
 

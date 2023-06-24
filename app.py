@@ -1,3 +1,4 @@
+import datetime
 from pathlib import Path
 
 import markdown
@@ -23,9 +24,14 @@ app.secret_key = "your_secret_key"  # Set your secret key here
 
 
 @app.route("/")
-def hello_world():  # put application's code here
-    return render_template("index.html", title="Home")
+def index_endpoint():  # put application's code here
+    return render_template("index.html",
+                           title="Home")
 
+@app.route("/main.html")
+def main_endpoint():  # put application's code here
+    return render_template("main.html",
+                           current_time=f"{datetime.datetime.now():%H:%M:%S}")
 
 @app.route("/settings")
 def hello_world1():  # put application's code here
@@ -87,7 +93,9 @@ def running_events():
     )
 
     # Render the future events in an HTML template
-    return render_template("running_events.html", events=running_events)
+    return render_template("running_events.html",
+                           events=running_events,
+                           current_time=f"{datetime.datetime.now():%H:%M:%S}")
 
 
 @app.route("/completed-events")

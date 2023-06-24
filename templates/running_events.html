@@ -1,37 +1,44 @@
-<body>
-<h1>Running Events</h1>
-<table>
-    <thead>
-    <tr>
-        <th>Schedule ID</th>
-        <th>Station ID</th>
-        <th>Start Time</th>
-        <th>Runtime</th>
-        <th>Repeat Rule</th>
-        <th>Filepath</th>
-        <th>File Size</th>
-        <th></th> <!-- Column for stop button -->
-    </tr>
-    </thead>
-    <tbody>
-    {% for event in events %}
-        <tr>
-            <td>{{ event.schedule_id }}</td>
-            <td>{{ event.station_id }}</td>
-            <td>{{ event.starttime }}</td>
-            <td>{{ event.runtime }} min.</td>
-            <td>{{ event.repeat_rule }}</td>
-            <td>{{ event.filepath }}</td>
-            <td>{{ event.filesize }}</td>
-            <td>
-                <button>Abort</button>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-<div>&nbsp;</div>
-<button hx-get="/"  hx-trigger="click" hx-target="body">Home</button>
+<div id="pywrr-main" hx-boost="true">
 
-</body>
+    <h1>Running Events</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Schedule ID</th>
+            <th>Station ID</th>
+            <th>Start Time</th>
+            <th>Runtime</th>
+            <th>Repeat Rule</th>
+            <th>Filepath</th>
+            <th>File Size</th>
+            <th></th> <!-- Column for stop button -->
+        </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.schedule_id }}</td>
+                <td>{{ event.station_id }}</td>
+                <td>{{ event.starttime }}</td>
+                <td>{{ event.runtime }} min.</td>
+                <td>{{ event.repeat_rule }}</td>
+                <td>{{ event.filepath }}</td>
+                <td>{{ event.filesize }}</td>
+                <td>
+                    <button>Abort</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div>&nbsp;</div>
+    <button hx-get="/" hx-trigger="click" hx-target="#pywrr-main">Home</button>
+    <div>&nbsp;</div>
+    {{ current_time }}
+
+    <div hx-get="/running-events"
+         hx-trigger="every 1s"
+         hx-target="#pywrr-main"
+         hx-swap="outerHTML"></div>
+</div>
 

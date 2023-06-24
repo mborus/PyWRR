@@ -16,29 +16,13 @@
 <body>
 
 <script>
-    console.log("main page reached1")
+    console.log("main page reached...")
 </script>
 
-<h1>PyWRR</h1>
+<div id="pywrr-main" hx-boost="true">
+    <div hx-get="/main.html" hx-target="#pywrr-main"  hx-trigger="load">...</div>
+</div>
 
-<ul>
-
-
-    <li><a href="/stations" hx-boost="true">Stations</a></li>
-    <li><a href="/future-events" hx-boost="true">Upcoming recordings</a></li>
-    <li><a href="/running-events" hx-boost="true">Running recordings</a></li>
-    <li><a href="/completed-events" hx-boost="true">Completed recordings</a></li>
-
-
-    <li><a href="/about" hx-boost="true">About</a></li>
-    <li><a href="/settings" hx-boost="true">Settings</a></li>
-
-</ul>
-
-<!--
-<button id="button1">Button 1</button>
-<button id="button2">Button 2</button>
--->
 
 </body>
 </html>
