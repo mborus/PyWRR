@@ -1,6 +1,7 @@
 import datetime
-import database
 import time
+
+import database
 from recorder import FFMPEGStreamRecording
 
 
@@ -20,6 +21,12 @@ class SchedulingLoop:
                 else:
                     if f.recording_thread.is_alive():
                         print(f, f.recording_thread.is_alive())
+                        print(f._recording_path, f._filesize_approx)
+
+                        if size := f.get_approx_size():
+                            database.update_schedule_item_filesize(
+                                f.schedule_id, force_filesize=size
+                            )
                     else:
                         if f.is_completed and not f.is_ready_to_be_discarded:
                             database.complete_schedule_item(f.schedule_id)

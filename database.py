@@ -7,8 +7,8 @@ from pathlib import Path
 
 from settings import DATABASE_NAME, RECORDING_PATH
 
-
 # Global variable for the database name
+
 
 class DatabaseException(Exception):
     pass
@@ -136,11 +136,10 @@ def add_schedule_item(station_id, starttime, runtime, filepath=None, repeat_rule
         if starttime < now_str:
             starttime = now_str
 
-
     # filter forbidden chars from filepath
     def filter_filename(filename):
         forbidden_chars = r'[<>:"/\\|?*]'
-        return re.sub(forbidden_chars, '_', filename)
+        return re.sub(forbidden_chars, "_", filename)
 
     if filepath is None:
         if isinstance(starttime, datetime.datetime):
@@ -152,7 +151,9 @@ def add_schedule_item(station_id, starttime, runtime, filepath=None, repeat_rule
     with get_cursor() as cursor:
 
         # Check if the station exists
-        cursor.execute("SELECT COUNT(*) FROM stations WHERE station_id = ?", (station_id,))
+        cursor.execute(
+            "SELECT COUNT(*) FROM stations WHERE station_id = ?", (station_id,)
+        )
         count = cursor.fetchone()[0]
 
         if count == 0:
@@ -377,7 +378,7 @@ def update_schedule_filepath(schedule_id, filepath):
         )
 
 
-def update_schedule_item_filesize(schedule_id):
+def update_schedule_item_filesize(schedule_id, force_filesize=None):
     with get_cursor() as cursor:
         # Check if the schedule item exists
         cursor.execute(
@@ -402,6 +403,10 @@ def update_schedule_item_filesize(schedule_id):
             filesize = os.path.getsize(filepath)
         else:
             filesize = 0
+
+        # force size during reording
+        if force_filesize:
+            filesize = force_filesize
 
         # Update the filesize field of the specified schedule item
         cursor.execute(

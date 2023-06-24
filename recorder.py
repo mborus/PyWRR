@@ -1,8 +1,10 @@
-import time
-from threading import Thread
 import subprocess
+import time
 from pathlib import Path
+from threading import Thread
+
 from settings import RECORDING_PATH
+
 
 class ScheduledRecordingException(Exception):
     pass
@@ -25,11 +27,15 @@ class FFMPEGStreamRecording:
         self.is_completed = False
         self.is_ready_to_be_discarded = False  # when finalized in the database
         self.log = []
+        self._recording_path = None
+        self._filesize_approx = 0
 
-        if not self.url.startswith('http'):
-            raise ScheduledRecordingException(f'Url {self.url} not correct')
+        if not self.url.startswith("http"):
+            raise ScheduledRecordingException(f"Url {self.url} not correct")
         if self.duration_min < 0 or self.duration_min >= 24 * 60:
-            raise ScheduledRecordingException(f'Recording duration {self.duration_min} out of limits.')
+            raise ScheduledRecordingException(
+                f"Recording duration {self.duration_min} out of limits."
+            )
 
         # TODO - validate filename doesn't exist!
 
@@ -39,24 +45,27 @@ class FFMPEGStreamRecording:
     @property
     def get_ffmpeg_call(self):
         if self.filename is None:
-            raise ValueError('Filename for recording not given.')
+            raise ValueError("Filename for recording not given.")
 
-        recording_path = Path(RECORDING_PATH, self.filename)
+        self._recording_path = Path(RECORDING_PATH, self.filename)
 
-
-        command = ['ffmpeg',
-                   # overwrite existing file
-                   '-y',
-                   # input url
-                   '-i', self.url,
-                   # do not re-encode
-                   '-codec', 'copy',
-                   # duration: set to a day and manually abort
-                   '-t',
-                   # f"{datetime.datetime(1980, 1, 1) + datetime.timedelta(seconds=60 * self.duration_min):%H:%M:%S}",
-                   '24:00:00',
-                   # output filename and path
-                   recording_path]
+        command = [
+            "ffmpeg",
+            # overwrite existing file
+            "-y",
+            # input url
+            "-i",
+            self.url,
+            # do not re-encode
+            "-codec",
+            "copy",
+            # duration: set to a day and manually abort
+            "-t",
+            # f"{datetime.datetime(1980, 1, 1) + datetime.timedelta(seconds=60 * self.duration_min):%H:%M:%S}",
+            "24:00:00",
+            # output filename and path
+            self._recording_path,
+        ]
 
         return command
 
@@ -66,16 +75,24 @@ class FFMPEGStreamRecording:
         self.starttime = time.time()
 
         # start recording process
-        self.process = subprocess.Popen(self.get_ffmpeg_call, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                        universal_newlines=True)
-        self.stderr_thread = Thread(target=self.output_handler, args=(self.process, 'stderr'))
+        self.process = subprocess.Popen(
+            self.get_ffmpeg_call,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+        self.stderr_thread = Thread(
+            target=self.output_handler, args=(self.process, "stderr")
+        )
         self.stderr_thread.daemon = True
         self.stderr_thread.start()
 
         while True:
             self.runtime_sec = int(time.time() - self.starttime)
             remaining_sec = self.duration_min * 60 - self.runtime_sec
-            print(f"[#{self.schedule_id}:{remaining_sec}s] {self.runtime_sec=:02.1f} - {self.log[-1] if self.log else '-'}")
+            print(
+                f"[#{self.schedule_id}:{remaining_sec}s] {self.runtime_sec=:02.1f} - {self.log[-1] if self.log else '-'}"
+            )
             if remaining_sec <= 0:
                 break
             time.sleep(2)
@@ -91,9 +108,20 @@ class FFMPEGStreamRecording:
         self.is_completed = True
 
     def output_handler(self, process, handler_type):
-        for line in iter(process.stderr.readline, ''):
+        for line in iter(process.stderr.readline, ""):
             self.log.append(line.strip())
 
+    def get_approx_size(self):
+        """read size from ffmpeg log"""
+        try:
+            size = [line for line in self.log if line.startswith("size=")][-1].split()[
+                1
+            ]
+            if size.endswith("kB"):
+                return int(size[:-2]) * 1024
+        except (IndexError, TypeError):
+            pass
+        return -1
 
 
 def validate_unique_filename(filepath):
@@ -115,5 +143,3 @@ def validate_unique_filename(filepath):
         counter += 1
 
     return str(new_filepath)
-
-
